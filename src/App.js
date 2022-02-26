@@ -1,14 +1,18 @@
-import './App.css';
+import React from 'react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import JoinRoomPage from './lib/pages/JoinRoomPage';
 import LandingPage from './lib/pages/LandingPage';
-import Center from './lib/views/common/Center';
 import GameWrapper from './lib/views/game/GameWrapper';
 
+
 function App() {
-  return (
-    <div className="App">
-      <LandingPage/>
-    </div>
-  );
+  return <Router>
+    <Routes>
+      <Route exact path='/' element={<LandingPage />} />
+      <Route exact path='/room/join' element={<JoinRoomPage />} />
+      <Route exact path='/game' element={<GameWrapper />} />
+    </Routes>
+  </Router>
 }
 
 export default App;

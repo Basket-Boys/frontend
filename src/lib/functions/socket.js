@@ -34,8 +34,8 @@ const joinRoom = (socket, username, room) => {
 // Ok I really dont know how to do this without the hook thing
 const getRoomData = (socket, username, setRoomData) => {
   socket.on("roomData", ({ room, users }, callback) => {
-    const playerID =
-      users[users.findIndex((user) => user.username === username)].player;
+    const playerID = users[users.findIndex((user) => user.username === username)].player;
+    console.log(playerID);
     const roomPlayers = [];
     users.forEach((user) => {
       roomPlayers.push(user.username);
@@ -43,7 +43,7 @@ const getRoomData = (socket, username, setRoomData) => {
     setRoomData({
       playerID,
       room,
-      roomPlayers,
+      roomPlayers
     });
   });
 };
@@ -56,7 +56,7 @@ const sendBlockage = (socket, combo) => {
 // Receive Blockages, use the addBlockage function
 const blockageSubscriber = (socket, player, addBlockage) => {
   socket.on("spoofed", ({ spoofedWords, spoofedUser }) => {
-    if (player === spoofedUser) {
+    if (player === spoofedUser.player) {
       addBlockage(Math.max(0, spoofedWords - 3), spoofedWords);
     }
   });
@@ -74,16 +74,17 @@ const blockageSubscriber = (socket, player, addBlockage) => {
 //   });
 // };
 
-// Send Victory
+// Send Loss
 const sendResult = (socket) => {
   socket.emit("condHandle", { loss: true });
 };
 
 // Receive Victory
-const resultSubscriber = (socket, player, handleLoss) => {
+const resultSubscriber = (socket, player, handleVictory) => {
   socket.on("win", ({ loser }) => {
-    if (player === loser) {
-      handleLoss(loser);
+    console.log(player, loser.player);
+    if (player !== loser.player) {
+      handleVictory();
     }
   });
 };
@@ -98,7 +99,7 @@ const sendDisplayList = (socket, wordList) => {
 // Receive Display List
 const displayListSubscriber = (socket, player, handleDisplayList) => {
   socket.on("displayList", ({ wordList, user }) => {
-    if (user === player) {
+    if (user.player === player) {
       handleDisplayList(wordList);
     }
   });
@@ -112,33 +113,29 @@ const sendMistake = (socket, mistakeCount) => {
 // Receive opponent's mistakes
 const mistakeSubscriber = (socket, player, handleMistakes) => {
   socket.on("mistakeCount", ({ mistakeCount, user }) => {
-    if (user === player) {
+    if (user.player === player) {
       handleMistakes(mistakeCount);
     }
   });
 };
 
-// Send flagAr (basically how correct the opponent's current typing word is)
+// Send flagArr (basically how correct the opponent's current typing word is)
 // Has to be sent quite often - each character typed.
-const sendFlagAr = (socket, flag, wrong) => {
-  const flagAr = [];
-  for (let i = 0; i < 5; i++) {
-    if (i < flag) {
-      flagAr.push(1);
-    } else if (i === flag && wrong) {
-      flagAr.push(-1);
-    } else if (i >= flag) {
-      flagAr.push(0);
-    }
+const sendFlagArr = (socket, flag, wrong) => {
+  const flagArr = [0, 0, 0, 0, 0];
+  if (flag < 5) for (let i = 0; i < 5; i++) {
+    if (i < flag) flagArr[i] = 1;
+    else if (i === flag && wrong) flagArr[i] = -1;
   }
-  socket.emit("sendFlagAr", flagAr);
+
+  socket.emit("sendFlagArr", flagArr);
 };
 
-// Receive flagAr - [1, 1, -1, 0, 0] for colours
-const flagArSubscriber = (socket, player, handleFlagAr) => {
-  socket.on("sendFlagAr", ({ flagAr, user }) => {
-    if (user === player) {
-      handleFlagAr(flagAr);
+// Receive flagArr - [1, 1, -1, 0, 0] for colours
+const flagArrSubscriber = (socket, player, handleFlagArr) => {
+  socket.on("sendFlagArr", ({ flagArr, user }) => {
+    if (user.player === player) {
+      handleFlagArr(flagArr);
     }
   });
 };
@@ -151,7 +148,7 @@ const sendBlockageIndex = (socket, blockageWordIndexes) => {
 // Receive Blockage word indexes
 const blockageIndexSubscriber = (socket, player, handleBlockageWordIndexes) => {
   socket.on("sendBlockageIndex", ({ blockageWordIndexes, user }) => {
-    if (user === player) {
+    if (user.player === player) {
       handleBlockageWordIndexes(blockageWordIndexes);
     }
   });
@@ -170,8 +167,8 @@ export {
   displayListSubscriber,
   sendMistake,
   mistakeSubscriber,
-  sendFlagAr,
-  flagArSubscriber,
+  sendFlagArr,
+  flagArrSubscriber,
   sendBlockageIndex,
   blockageIndexSubscriber,
 };

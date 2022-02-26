@@ -1,4 +1,5 @@
 import React from "react";
+import { sendFlagArr } from "../../functions/socket";
 import Adjust from "../../values/Adjust";
 import SpacedRow from "../common/SpacedRow";
 import LetterBox from "./LetterBox";
@@ -7,6 +8,8 @@ import LetterBox from "./LetterBox";
 export default class KeyDownWordRow extends React.Component {
     constructor(props) {
         super(props);
+        this.socket = props.socket;
+
         this.word = props.word;
         this.checkBlockage = props.checkBlockage;
         this.checkUpdate = props.checkUpdate;
@@ -33,6 +36,8 @@ export default class KeyDownWordRow extends React.Component {
 
         const match = event.key.toLocaleUpperCase() === this.word[this.state.flag].toLocaleUpperCase();
         if (match) {
+            sendFlagArr(this.socket, this.state.flag + 1, false);
+
             this.setState({
                 flag: this.state.flag + 1,
                 wrong: false
@@ -43,6 +48,7 @@ export default class KeyDownWordRow extends React.Component {
             }
         }
         else {
+            sendFlagArr(this.socket, this.state.flag, true);
             this.setState({ wrong: true });
             this.wrongHandler();
         }

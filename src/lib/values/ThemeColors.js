@@ -1,4 +1,7 @@
 const ThemeColors = {
+    theme: {
+        primary: '#2471af', //Matisse (dark blue)
+    },
     words: {
         display: '#F7f7f7', //Wild Sand (light grey)
         correct: '#168c39', //Jewel (green)
@@ -9,6 +12,7 @@ const ThemeColors = {
     text: {
         white: '#FFFFFF', //white
         black: '#000000', //black
+        error: 'red'
     },
     meter: {
         fill: '#C5711f', //Ochre (brown)

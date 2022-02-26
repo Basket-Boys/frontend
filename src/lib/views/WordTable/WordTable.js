@@ -6,6 +6,7 @@ import {
   setBlockage,
   shiftDown,
 } from "../../functions/main";
+import { blockageIndexSubscriber, blockageSubscriber, sendBlockage, sendBlockageIndex, sendDisplayList, sendFlagArr, sendMistake } from "../../functions/socket";
 import Adjust from "../../values/Adjust";
 import SpacedColumn from "../common/SpacedColumn";
 import DisplayWordRow from "./DisplayWordRow";
@@ -14,6 +15,8 @@ import KeyDownWordRow from "./KeyDownWordRow";
 export default class WordTable extends React.Component {
   constructor(props) {
     super(props);
+
+    this.socket = props.socket;
 
     this.rows = props.rows || 10;
 
@@ -34,6 +37,8 @@ export default class WordTable extends React.Component {
 
   componentDidMount() {
     this.toggleIdlePunisher();
+    sendDisplayList(this.socket, this.state.wordList);
+    blockageSubscriber(this.socket, this.props.playerID, (numChars, numWords) => this.addBlockage(numChars, numWords));
   }
 
   componentWillUnmount() {
@@ -69,23 +74,29 @@ export default class WordTable extends React.Component {
     const copyBWI = this.state.blockageWordIndexes;
     copyBWI.shift();
 
-    shiftDown(this.state.wordList, (newList) =>
-      this.setState({
-        wordList: newList,
-        blockageWordIndexes: copyBWI,
-        shouldBlockUpdate: false,
-      })
+    shiftDown(this.state.wordList, (newList) => {
+            this.setState({
+                wordList: newList,
+                blockageWordIndexes: copyBWI,
+                shouldBlockUpdate: false,
+            });
+
+            //sockets
+            sendFlagArr(this.socket, 0, false);
+            sendDisplayList(this.socket, newList);
+            sendBlockageIndex(this.socket, copyBWI);
+        }
     );
   }
 
   //combo and meter handler
   metricsHandler(wordCorrect) {
     const gameLost = onFinishWord(
-      this.getComboCount(),
-      (newCount) => this.setComboCount(newCount),
-      this.getMistakeCount(),
-      (newCount) => this.setMistakeCount(newCount),
-      wordCorrect
+        this.getComboCount(),
+        (newCount) => this.setComboCount(newCount),
+        this.getMistakeCount(),
+        (newCount) => this.setMistakeCount(newCount),
+        wordCorrect
     );
 
     if (gameLost) this.onLoss();
@@ -144,6 +155,7 @@ export default class WordTable extends React.Component {
         </SpacedColumn>
 
         <KeyDownWordRow
+          socket={this.socket}
           key={firstWord}
           word={firstWord}
           checkBlockage={(charI) => this.checkBlockage(0, charI)}
