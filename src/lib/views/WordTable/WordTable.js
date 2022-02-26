@@ -1,5 +1,5 @@
 import React from "react";
-import { delayFn, setBlockage, shiftDown } from "../../functions/main";
+import { delayFn, getIdlePunisher, onFinishWord, setBlockage, shiftDown } from "../../functions/main";
 import Adjust from "../../values/Adjust";
 import SpacedColumn from "../common/SpacedColumn";
 import DisplayWordRow from "./DisplayWordRow";
@@ -10,11 +10,40 @@ export default class WordTable extends React.Component {
         super(props);
 
         this.rows = props.rows || 10;
+
+        this.getComboCount = props.getComboCount;
+        this.setComboCount = props.setComboCount;
+
+        this.getMistakeCount = props.getMistakeCount;
+        this.setMistakeCount = props.setMistakeCount;
+
+        this.onLoss = props.onLoss;
+
         this.state = {
             wordList: props.fullWordList,
             blockageWordIndexes: [],
             shouldBlockUpdate: false
         }
+    }
+
+    componentDidMount() {
+        this.toggleIdlePunisher();
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.idlePunisher);
+    }
+
+    toggleIdlePunisher() {
+        if (this.idlePunisher) clearInterval(this.idlePunisher);
+
+        this.idlePunisher = getIdlePunisher(
+            this.getComboCount,
+            this.setComboCount,
+            this.getMistakeCount,
+            this.setMistakeCount,
+            this.onLoss
+        );
     }
 
     addBlockage(numChars, numWords) {
@@ -39,13 +68,37 @@ export default class WordTable extends React.Component {
         }));
     }
 
+    //combo and meter handler
+    metricsHandler(wordCorrect) {
+        const gameLost = onFinishWord(
+            this.getComboCount(), 
+            (newCount) => this.setComboCount(newCount),
+            this.getMistakeCount(),
+            (newCount) => this.setMistakeCount(newCount),
+            wordCorrect
+        );
+
+        if (gameLost) this.onLoss();
+    }
+
     //complete correct word entered
     correctHandler() {
+        clearInterval(this.idlePunisher);
+        this.metricsHandler(true);
         this.shiftAndRemoveBlockage();
+
+        this.idlePunisher = getIdlePunisher(
+            this.getComboCount,
+            this.setComboCount,
+            this.getMistakeCount,
+            this.setMistakeCount,
+            this.onLoss
+        );
     }
 
     //wrong word entered
     wrongHandler() {
+        this.metricsHandler(false);
         this.setState({ shouldBlockUpdate: true });
         delayFn(() => this.shiftAndRemoveBlockage());
     }

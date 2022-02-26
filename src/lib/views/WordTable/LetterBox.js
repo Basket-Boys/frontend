@@ -30,14 +30,15 @@ export default function LetterBox({
         bgColor = ThemeColors.words.blocked;
         textColor = ThemeColors.words.blocked;
     }
-    
+
     return <div
         style={{
+            display:'flex',
             width: boxSize,
             height: boxSize,
             backgroundColor: bgColor,
-            alignContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            justifyContent: 'center'
         }}
     >
         <CText color={textColor}>{letter}</CText>

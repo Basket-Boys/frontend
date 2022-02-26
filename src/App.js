@@ -1,13 +1,12 @@
 import './App.css';
-import testWords from './lib/functions/fill';
-import WordTable from './lib/views/WordTable/WordTable';
+import LandingPage from './lib/pages/LandingPage';
+import Center from './lib/views/common/Center';
+import GameWrapper from './lib/views/game/GameWrapper';
 
 function App() {
   return (
     <div className="App">
-      <WordTable
-        fullWordList={testWords}
-      />
+      <LandingPage/>
     </div>
   );
 }

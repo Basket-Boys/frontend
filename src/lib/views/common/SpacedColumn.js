@@ -1,10 +1,15 @@
 export default function SpacedColumn({ 
     children, 
-    spacing
+    spacing,
+    alignItems
 }) {
+    alignItems = alignItems || 'center';
+
     return <div
         style={{
-            flexDirection: 'column'
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: alignItems
         }}
     >
         {children && children.length > 1 
@@ -13,6 +18,7 @@ export default function SpacedColumn({
                     key={i}
                     style={{
                         display: 'flex',
+                        alignItems: alignItems,
                         marginBottom: i === children.length - 1 ? 0 : spacing
                     }}
                 >

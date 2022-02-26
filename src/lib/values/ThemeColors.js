@@ -9,6 +9,11 @@ const ThemeColors = {
     text: {
         white: '#FFFFFF', //white
         black: '#000000', //black
+    },
+    meter: {
+        fill: '#C5711f', //Ochre (brown)
+        empty: '#Fff3e6', //Serenade (sand)
+        border: '#202020', //Mine Shaft (almost black)
     }
 };
 

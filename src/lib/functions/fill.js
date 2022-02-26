@@ -1,3 +1,7 @@
+import { range } from "./main";
+
+const getBlanks = (n, length) => range(n).map((_, i) => ' '.repeat(length));
+
 const testWords = [
     "which",
     "there",
@@ -5758,4 +5762,4 @@ const testWords = [
     "pupal",
   ]
 
-export default testWords;
+export { testWords, getBlanks };

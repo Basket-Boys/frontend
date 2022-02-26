@@ -4,8 +4,12 @@ import LetterBox from "./LetterBox";
 
 export default function DisplayWordRow({
     word,
-    checkBlockage
+    checkBlockage,
+    flagArr
 }) {
+    const isDisplay = flagArr === undefined;
+    flagArr = flagArr || [0, 0, 0, 0, 0];
+
     return <SpacedRow
             spacing={Adjust.spacing.grid}
         >
@@ -13,7 +17,9 @@ export default function DisplayWordRow({
                 return <LetterBox
                     key={`${letter}-${i}`}
                     letter={letter}
-                    isDisplay
+                    isDisplay={isDisplay}
+                    isCorrect={flagArr[i] === 1}
+                    isWrong={flagArr[i] === -1}
                     checkBlockage={() => checkBlockage(i)}
                 />
             })}

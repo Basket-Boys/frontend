@@ -4,6 +4,11 @@ const MAX_NUM_CHARS = 5;
 const DELAY = 1;
 const PUNISH_ME_DADDY = 10; // IN SECONDS
 
+//returns an array [0, 1, 2, ..., n]
+const range = (n) => {
+  return Array.from(Array(n).keys());
+}
+
 // THIS IS AN INTERNAL FUNCTION, NOT FOR EXPORTING (unless need?)
 const shuffle = (array) => {
   let currentIndex = array.length,
@@ -49,10 +54,17 @@ const delayFn = (fn) => {
 // Idle Punisher - returns the setInterval.
 // Remember to call clearInterval() on the returned interval afterwards.
 // Not sure if this function works.
-const idlePunisher = (mistakeMeter, setMistakeMeter) => {
+const getIdlePunisher = (
+  getComboCount,
+  setComboCount,
+  getMistakeCount,
+  setMistakeCount,
+  onLoss
+) => {
   // Creates a setInterval that adds 1 to mistakeMeter every X seconds.
   const punisher = setInterval(() => {
-    setMistakeMeter(mistakeMeter + 1);
+    const gameLost = onFinishWord(getComboCount(), setComboCount, getMistakeCount(), setMistakeCount, false);
+    if (gameLost) onLoss();
   }, PUNISH_ME_DADDY * 1000);
   return punisher;
 };
@@ -61,23 +73,23 @@ const idlePunisher = (mistakeMeter, setMistakeMeter) => {
 const onFinishWord = (
   comboCount,
   setComboCount,
-  mistakeMeter,
-  setMistakeMeter,
+  mistakeCount,
+  setMistakeCount,
   wordCorrect
 ) => {
-  // If word is correct, add to combolist. Additionally, if a mistake is made, mistakeMeter will increase by 1.
-  // If mistakeMeter reaches MAX_ERRORS, return TRUE
+  // If word is correct, add to combolist. Additionally, if a mistake is made, mistakeCount will increase by 1.
+  // If mistakeCount reaches MAX_ERRORS, return TRUE
   // Otherwise, manageCombo will always return FALSE.
   // Resets combo if word is wrong.
   if (wordCorrect) {
     setComboCount(comboCount + 1);
     if (comboCount % MISTAKE_FORGIVENESS === 0 && comboCount !== 0) {
-      setMistakeMeter(Math.min(mistakeMeter - 1, 0));
+      setMistakeCount(Math.max(mistakeCount - 1, 0));
     }
   } else {
     setComboCount(0);
-    if (mistakeMeter + 1 === MAX_ERRORS) return true;
-    setMistakeMeter(mistakeMeter + 1);
+    setMistakeCount(mistakeCount + 1);
+    if (mistakeCount + 1 === MAX_ERRORS) return true;
   }
   return false;
 };
@@ -108,7 +120,7 @@ const setBlockage = (numChars, numWords) => {
   return arrList;
 };
 
-export { delayFn, getWordList, onFinishWord, shiftDown, setBlockage, idlePunisher };
+export { range, delayFn, getWordList, onFinishWord, shiftDown, setBlockage, getIdlePunisher };
 
 // TEST GWL
 // console.log(getWordList());
