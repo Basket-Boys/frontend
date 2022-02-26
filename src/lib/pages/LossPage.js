@@ -4,7 +4,7 @@ const styles = {
   opacity:"0.5",
   backgroundColor: "grey",
   position: "fixed",
-  width: "100vh",
+  width: "100vw",
   height: "100vh",
   zIndex: "1000",
   left: "0",
@@ -20,6 +20,7 @@ export default function transparency() {
 					left: "50%",
 					fontSize: "5em",
 					color: "black",
+          transform: "translate(-50%, -100%)",
 				}}
 			>
 				You Lose :(
