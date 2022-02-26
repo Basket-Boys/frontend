@@ -17,9 +17,13 @@
 
 An intense 1 vs 1 typing game that draws inspiration from Typeracer and Tetris. Send "garbage" to the other person by typing perfectly in quick succession - and clear your garbage by making "combos".
 
+Our backend: https://github.com/Basket-Boys/backend
+
 ## Rules of the game
 
-- Your goal is to eliminate your opponent by preventing
+Your goal is to eliminate your opponent - either by attrition or by sending them enough garbage to prevent them from clearing their lines.
+
+Idling comes with a cost as well so you can't win by just not typing at all.
 
 ## Tech stack used
 
