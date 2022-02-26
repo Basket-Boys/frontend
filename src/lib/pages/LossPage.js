@@ -11,7 +11,7 @@ const styles = {
   right: "0",
 }
 
-export default function transparency() {
+export default function LossPage() {
 	return <div style={styles}>
 			<p 
 				style={{

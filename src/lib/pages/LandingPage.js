@@ -7,7 +7,6 @@ import Center from "../views/common/Center";
 import CText from "../views/common/CText";
 import SpacedColumn from "../views/common/SpacedColumn";
 import KeyDownInput from "../views/landing/KeyDownInput";
-import VictoryPage from "./VictoryPage"
 
 export default function LandingPage() {
     const [ username, setUsername ] = React.useState('');
@@ -24,7 +23,6 @@ export default function LandingPage() {
         navigate(path, {replace: true, state: { username }});
     }
     return <Center>
-        <VictoryPage/>
         <SpacedColumn
             spacing={Adjust.spacing.grid}
             alignItems='center'

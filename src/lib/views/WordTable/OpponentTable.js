@@ -2,6 +2,7 @@ import React from "react";
 import { getBlanks } from "../../functions/fill";
 import { blockageIndexSubscriber, displayListSubscriber, flagArrSubscriber, mistakeSubscriber } from "../../functions/socket";
 import Adjust from "../../values/Adjust";
+import CText from "../common/CText";
 import SpacedColumn from "../common/SpacedColumn";
 import SpacedRow from "../common/SpacedRow";
 import MistakeMeter from "../game/MistakeMeter";
@@ -45,12 +46,13 @@ export default class OpponentTable extends React.Component {
             <SpacedColumn
                 spacing={Adjust.spacing.grid}
             >
+                <CText>YOUR OPPONENT</CText>
                 <SpacedColumn
                     spacing={Adjust.spacing.grid}
                 >
                     {this.state.displayList.slice(1, this.rows).reverse().map((word, i) => {
                         //get unreversed index
-                        const trueI = this.state.displayList.length - 1 - i;
+                        const trueI = this.state.displayList.length - 2 - i;
 
                         return <DisplayWordRow
                             key={word}

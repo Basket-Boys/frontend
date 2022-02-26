@@ -19,6 +19,12 @@
 // For functions using emit, can use multiple times.
 // For functions that are using "on", ONLY emit once.
 
+//Signal ready
+const signalReady = (socket, username) => {
+  console.log('signalling');
+  socket.emit('ready', { username });
+}
+
 // Join room function
 // Takes in a socket, username and password, then emits a "join" event to the server.
 const joinRoom = (socket, username, room) => {
@@ -35,7 +41,6 @@ const joinRoom = (socket, username, room) => {
 const getRoomData = (socket, username, setRoomData) => {
   socket.on("roomData", ({ room, users }, callback) => {
     const playerID = users[users.findIndex((user) => user.username === username)].player;
-    console.log(playerID);
     const roomPlayers = [];
     users.forEach((user) => {
       roomPlayers.push(user.username);
@@ -48,6 +53,23 @@ const getRoomData = (socket, username, setRoomData) => {
   });
 };
 
+//request for word list
+const reqWordList = (socket, username) => {
+  socket.emit('reqWordList',{ username });
+}
+
+//Get Word List
+const wordListSubscriber = (socket, player, handleWordList) => {
+  socket.on("wordList", ({ wordList1, wordList2 }) => {
+    console.log(wordList1, wordList2);
+    if (player === 1) {
+      handleWordList(wordList1);
+    } else {
+      handleWordList(wordList2);
+    }
+  });
+};
+
 // Send Blockages
 const sendBlockage = (socket, combo) => {
   socket.emit("getSpoofed", { combo });
@@ -55,9 +77,9 @@ const sendBlockage = (socket, combo) => {
 
 // Receive Blockages, use the addBlockage function
 const blockageSubscriber = (socket, player, addBlockage) => {
-  socket.on("spoofed", ({ spoofedWords, spoofedUser }) => {
-    if (player === spoofedUser.player) {
-      addBlockage(Math.max(0, spoofedWords - 3), spoofedWords);
+  socket.on("spoofed", ({ spoofedWords, spoofedUserPlayer }) => {
+    if (player === spoofedUserPlayer) {
+      addBlockage(spoofedWords < 3 ? spoofedWords : 3, spoofedWords);
     }
   });
 };
@@ -82,7 +104,6 @@ const sendResult = (socket) => {
 // Receive Victory
 const resultSubscriber = (socket, player, handleVictory) => {
   socket.on("win", ({ loser }) => {
-    console.log(player, loser.player);
     if (player !== loser.player) {
       handleVictory();
     }
@@ -154,9 +175,20 @@ const blockageIndexSubscriber = (socket, player, handleBlockageWordIndexes) => {
   });
 };
 
+const offAll = (socket) => {
+  const channels = ['win', 'displayList', 'mistakeCount', 'sendFlagArr', 'sendBlockageIndex'];
+
+  for (let i = 0; i < channels.length; i++) {
+    socket.off(channels[i]);
+  }
+}
+
 export {
+  signalReady,
   joinRoom,
   getRoomData,
+  reqWordList,
+  wordListSubscriber,
   sendBlockage,
   blockageSubscriber,
   //   sendArray,
@@ -171,4 +203,5 @@ export {
   flagArrSubscriber,
   sendBlockageIndex,
   blockageIndexSubscriber,
+  offAll
 };

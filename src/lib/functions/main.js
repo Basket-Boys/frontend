@@ -1,3 +1,5 @@
+import { testWords } from "./fill";
+
 const MAX_ERRORS = 5;
 const MISTAKE_FORGIVENESS = 5;
 const MAX_NUM_CHARS = 5;
@@ -14,9 +16,9 @@ const shuffle = (array) => {
   let currentIndex = array.length,
     randomIndex;
 
-  // While there remain elements to shuffle
-  while (currentIndex != 0) {
-    // Pick a remaining element
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
 
@@ -28,27 +30,18 @@ const shuffle = (array) => {
   }
 
   return array;
-};
+}
 
 // Get wordlist - get a list of words, return two shuffled wordlists.
 
 const getWordList = () => {
-  /*
-  // SOURCE https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
-  const wordList1 = fs.readFileSync("flw.txt", "utf8");
-  const lines1 = wordList1
-    .split(/\n/)
-    .map((x) => x.toLowerCase())
-    .sort()
-    .filter((x) => x);
-  return lines1;
-  */
+  return shuffle(testWords);
 };
 
 
 //delay a function
-const delayFn = (fn) => {
-  setTimeout(() => fn(), DELAY * 1000);
+const delayFn = (fn, delay) => {
+  setTimeout(() => fn(), delay * 1000);
 }
 
 // Idle Punisher - returns the setInterval.

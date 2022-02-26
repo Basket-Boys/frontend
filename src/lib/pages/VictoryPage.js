@@ -3,7 +3,7 @@ import React from "react";
 const styles = {
   opacity:"0.5",
   backgroundColor: "grey",
-  position: "fixed",
+  position: "absolute",
   width: "100vw",
   height: "100vh",
   zIndex: "1000",
@@ -11,7 +11,7 @@ const styles = {
   right: "0",
 }
 
-export default function transparency() {
+export default function VictoryPage() {
 	return <div style={styles}>
 			<p 
 				style={{

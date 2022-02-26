@@ -6,8 +6,9 @@ import {
   setBlockage,
   shiftDown,
 } from "../../functions/main";
-import { blockageIndexSubscriber, blockageSubscriber, sendBlockage, sendBlockageIndex, sendDisplayList, sendFlagArr, sendMistake } from "../../functions/socket";
+import { blockageSubscriber, offAll, sendBlockageIndex, sendFlagArr } from "../../functions/socket";
 import Adjust from "../../values/Adjust";
+import CText from "../common/CText";
 import SpacedColumn from "../common/SpacedColumn";
 import DisplayWordRow from "./DisplayWordRow";
 import KeyDownWordRow from "./KeyDownWordRow";
@@ -27,9 +28,8 @@ export default class WordTable extends React.Component {
     this.setMistakeCount = props.setMistakeCount;
 
     this.onLoss = props.onLoss;
-
+    
     this.state = {
-      wordList: props.fullWordList,
       blockageWordIndexes: [],
       shouldBlockUpdate: false,
     };
@@ -37,12 +37,16 @@ export default class WordTable extends React.Component {
 
   componentDidMount() {
     this.toggleIdlePunisher();
-    sendDisplayList(this.socket, this.state.wordList);
     blockageSubscriber(this.socket, this.props.playerID, (numChars, numWords) => this.addBlockage(numChars, numWords));
   }
 
   componentWillUnmount() {
     clearInterval(this.idlePunisher);
+    offAll(this.socket);
+  }
+
+  componentDidUpdate() {
+      if (this.props.gameEnded) clearInterval(this.idlePunisher);
   }
 
   toggleIdlePunisher() {
@@ -58,11 +62,11 @@ export default class WordTable extends React.Component {
   }
 
   addBlockage(numChars, numWords) {
+    const newBWI = this.state.blockageWordIndexes.concat(setBlockage(numChars, numWords));
     this.setState({
-      blockageWordIndexes: this.state.blockageWordIndexes.concat(
-        setBlockage(numChars, numWords)
-      ),
+      blockageWordIndexes: newBWI,
     });
+    sendBlockageIndex(this.socket, newBWI);
   }
 
   //block updates from keyboard if necessary
@@ -74,16 +78,16 @@ export default class WordTable extends React.Component {
     const copyBWI = this.state.blockageWordIndexes;
     copyBWI.shift();
 
-    shiftDown(this.state.wordList, (newList) => {
+    shiftDown(this.props.wordList, (newList) => {
+            this.props.setWordList(newList);
             this.setState({
-                wordList: newList,
                 blockageWordIndexes: copyBWI,
                 shouldBlockUpdate: false,
             });
 
             //sockets
             sendFlagArr(this.socket, 0, false);
-            sendDisplayList(this.socket, newList);
+            //sendDisplayList(this.socket, newList);
             sendBlockageIndex(this.socket, copyBWI);
         }
     );
@@ -121,7 +125,7 @@ export default class WordTable extends React.Component {
   wrongHandler() {
     this.metricsHandler(false);
     this.setState({ shouldBlockUpdate: true });
-    delayFn(() => this.shiftAndRemoveBlockage());
+    delayFn(() => this.shiftAndRemoveBlockage(), 1);
   }
 
   getBlockageIndexes(i) {
@@ -135,10 +139,11 @@ export default class WordTable extends React.Component {
   }
 
   render() {
-    const displayList = this.state.wordList.slice(1, this.rows).reverse();
-    const firstWord = this.state.wordList[0];
+    const displayList = this.props.wordList.slice(1, this.rows).reverse();
+    const firstWord = this.props.wordList[0];
     return (
       <SpacedColumn spacing={Adjust.spacing.grid}>
+          <CText>YOU</CText>
         <SpacedColumn spacing={Adjust.spacing.grid}>
           {displayList.map((word, i) => {
             //get unreversed index
@@ -156,6 +161,7 @@ export default class WordTable extends React.Component {
 
         <KeyDownWordRow
           socket={this.socket}
+          gameEnded={this.props.gameEnded}
           key={firstWord}
           word={firstWord}
           checkBlockage={(charI) => this.checkBlockage(0, charI)}
