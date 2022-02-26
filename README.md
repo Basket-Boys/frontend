@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# Word-tris
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Team Basket Boys
 
-## Available Scripts
+|Name         |
+|:-----------:|
+|Junius Pun   |
+|Koh Ming En  |
+|Ng Ho Chi    |
 
-In the project directory, you can run:
+## What our project does
 
-### `npm start`
+|                                                    Tetris99                                                     |         Our game          |
+| :-------------------------------------------------------------------------------------------------------------: | :-----------------------: |
+| ![image](https://user-images.githubusercontent.com/35862661/155842769-98ef575a-1e76-40aa-a075-ac611ebddafd.png) | ... |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+An intense 1 vs 1 typing game that draws inspiration from Typeracer and Tetris. Send "garbage" to the other person by typing perfectly in quick succession - and clear your garbage by making "combos".
 
-### `npm test`
+## Rules of the game
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Your goal is to eliminate your opponent by preventing
 
-### `npm run build`
+## Tech stack used
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Front End
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- React (create-react-app)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Back End
 
-### `npm run eject`
+- Express to host a simple http server.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Others
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+We used Socket.io to handle web sockets, which allowed us to manage real-time communication between our front-end and our back-end.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Resources used
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+To get our words, we used [this](https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt) wordlist from Stanford.
 
-## Learn More
+## Some challenges we faced
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Getting Web sockets to work properly
+- Having to jump a lot between the React front-end and the Express back-end
+- Having to convert an entire component to a class-based one to fix a problem
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## What we're proud of
+- First time using Web Sockets to build a working project
+- 0 external modules for UI!
+- Organised and neat code
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
