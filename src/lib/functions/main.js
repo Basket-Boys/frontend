@@ -1,8 +1,7 @@
-const fs = require("fs");
-
 const MAX_ERRORS = 5;
 const MISTAKE_FORGIVENESS = 5;
 const MAX_NUM_CHARS = 5;
+const DELAY = 1;
 const PUNISH_ME_DADDY = 10; // IN SECONDS
 
 // THIS IS AN INTERNAL FUNCTION, NOT FOR EXPORTING (unless need?)
@@ -27,24 +26,25 @@ const shuffle = (array) => {
 };
 
 // Get wordlist - get a list of words, return two shuffled wordlists.
+
 const getWordList = () => {
+  /*
   // SOURCE https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
   const wordList1 = fs.readFileSync("flw.txt", "utf8");
-  const wordList2 = fs.readFileSync("flw.txt", "utf8");
   const lines1 = wordList1
     .split(/\n/)
     .map((x) => x.toLowerCase())
     .sort()
     .filter((x) => x);
-  const lines2 = wordList2
-    .split(/\n/)
-    .map((x) => x.toLowerCase())
-    .sort()
-    .filter((x) => x);
-  shuffle(lines1);
-  shuffle(lines2);
-  return [lines1, lines2];
+  return lines1;
+  */
 };
+
+
+//delay a function
+const delayFn = (fn) => {
+  setTimeout(() => fn(), DELAY * 1000);
+}
 
 // Idle Punisher - returns the setInterval.
 // Remember to call clearInterval() on the returned interval afterwards.
@@ -108,7 +108,7 @@ const setBlockage = (numChars, numWords) => {
   return arrList;
 };
 
-// export { getWordList, onFinishWord, shiftDown, setBlockage, idlePunisher };
+export { delayFn, getWordList, onFinishWord, shiftDown, setBlockage, idlePunisher };
 
 // TEST GWL
 // console.log(getWordList());
@@ -136,5 +136,5 @@ const setBlockage = (numChars, numWords) => {
 // console.log(x);
 
 // TEST SETBLOCKAGE
-// x = setBlockage(3, 5);
-// console.log(x);
+//const x = setBlockage(3, 5);
+//console.log(x);

@@ -1,12 +1,15 @@
 import React from "react";
+import Adjust from "../../values/Adjust";
 import SpacedRow from "../common/SpacedRow";
 import LetterBox from "./LetterBox";
 
 
-export default class WordRow extends React.Component {
+export default class KeyDownWordRow extends React.Component {
     constructor(props) {
         super(props);
         this.word = props.word;
+        this.checkBlockage = props.checkBlockage;
+        this.checkUpdate = props.checkUpdate;
         this.correctHandler = props.correctHandler;
         this.wrongHandler = props.wrongHandler;
 
@@ -26,16 +29,15 @@ export default class WordRow extends React.Component {
     }
 
     keyPressListener(event) {
-        console.log(event);
-        const match = event.key.toLocaleUpperCase() === this.word[this.state.flag].toLocaleUpperCase();
+        if (!this.checkUpdate()) return;
 
+        const match = event.key.toLocaleUpperCase() === this.word[this.state.flag].toLocaleUpperCase();
         if (match) {
             this.setState({
                 flag: this.state.flag + 1,
                 wrong: false
             });
-
-            if (this.state.flag === this.word.length - 1) {
+            if (this.state.flag === this.word.length) {
                 this.correctHandler();
                 return;
             }
@@ -48,7 +50,7 @@ export default class WordRow extends React.Component {
     
     render() {
         return <SpacedRow
-            spacing={10}
+            spacing={Adjust.spacing.grid}
         >
             {this.word.split('').map((letter, i) => {
                 return <LetterBox
@@ -56,6 +58,7 @@ export default class WordRow extends React.Component {
                     letter={letter}
                     isCorrect={i < this.state.flag}
                     isWrong={this.state.wrong && this.state.flag === i}
+                    checkBlockage={() => this.checkBlockage(i)}
                 />
             })}
         </SpacedRow>;
