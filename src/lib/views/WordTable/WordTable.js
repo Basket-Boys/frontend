@@ -103,27 +103,38 @@ export default class WordTable extends React.Component {
         wordCorrect
     );
 
-    if (gameLost) this.onLoss();
+    return gameLost;
   }
 
   //complete correct word entered
   correctHandler() {
     clearInterval(this.idlePunisher);
-    this.metricsHandler(true);
+    const gameLost = this.metricsHandler(true);
+
+    if (gameLost) {
+        this.onLoss();
+        return;
+    }
+
     this.shiftAndRemoveBlockage();
 
     this.idlePunisher = getIdlePunisher(
-      this.getComboCount,
-      this.setComboCount,
-      this.getMistakeCount,
-      this.setMistakeCount,
-      this.onLoss
+    this.getComboCount,
+    this.setComboCount,
+    this.getMistakeCount,
+    this.setMistakeCount,
+    this.onLoss
     );
   }
 
   //wrong word entered
   wrongHandler() {
-    this.metricsHandler(false);
+    const gameLost = this.metricsHandler(false);
+    if(gameLost) {
+        this.onLoss();
+        return;
+    }
+
     this.setState({ shouldBlockUpdate: true });
     delayFn(() => this.shiftAndRemoveBlockage(), 1);
   }

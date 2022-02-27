@@ -32,9 +32,8 @@ export default class KeyDownWordRow extends React.Component {
     }
 
     keyPressListener(event) {
-        if (!this.checkUpdate()) return;
+        if (!this.checkUpdate() || this.props.gameEnded) return;
 
-        console.log('running');
         const match = event.key.toLocaleUpperCase() === this.word[this.state.flag].toLocaleUpperCase();
         if (match) {
             sendFlagArr(this.socket, this.state.flag + 1, false);

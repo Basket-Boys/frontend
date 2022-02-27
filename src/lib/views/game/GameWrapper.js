@@ -63,10 +63,10 @@ class GameWrapperClass extends React.Component {
     
     componentWillUnmount() {
         if (this.socket) this.socket.disconnect();
-        console.log('gamewrapper unmount');
     }
 
     setNewWordList(newList) {
+        if (this.state.gameEnded) return;
         this.setState({ loadedWords: true, wordList: newList });
         sendDisplayList(this.socket, newList);
     }
@@ -146,15 +146,15 @@ class GameWrapperClass extends React.Component {
             </SpacedRow>
         </Center>;
 
-        return this.state.gameEnded
-            ? <React.Fragment>
-                {this.state.isVictory
+        return <React.Fragment>
+            {this.state.gameEnded 
+                ? this.state.isVictory
                     ? <VictoryPage />
                     : <LossPage />
-                }
-                {mainGame}
-            </React.Fragment>
-            : mainGame;
+                : null
+            }
+            {mainGame}
+        </React.Fragment>
     }
 }
 

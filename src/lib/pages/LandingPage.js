@@ -27,6 +27,7 @@ export default function LandingPage() {
             spacing={Adjust.spacing.grid}
             alignItems='center'
         >
+            <h1>word-tris</h1>
             <CText>Enter a username.</CText>
             <KeyDownInput
                 setInput={(input) => setUsername(input)}

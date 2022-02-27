@@ -21,7 +21,6 @@
 
 //Signal ready
 const signalReady = (socket, username) => {
-  console.log('signalling');
   socket.emit('ready', { username });
 }
 
@@ -61,7 +60,6 @@ const reqWordList = (socket, username) => {
 //Get Word List
 const wordListSubscriber = (socket, player, handleWordList) => {
   socket.on("wordList", ({ wordList1, wordList2 }) => {
-    console.log(wordList1, wordList2);
     if (player === 1) {
       handleWordList(wordList1);
     } else {
