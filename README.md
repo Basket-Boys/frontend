@@ -1,5 +1,7 @@
 # Word-tris
 
+Try our game [here!](https://word-tris.netlify.app)
+
 ![gameplay](https://user-images.githubusercontent.com/35862661/155864075-f71d8869-c295-4d1a-af7e-5ca5253c76e6.gif)
 
 ## Team Basket Boys
