@@ -73,7 +73,7 @@ class GameWrapperClass extends React.Component {
 
     delayedRedirect() {
         offAll(this.socket);
-        //delayFn(() => window.location.href = '/', 3);
+        delayFn(() => window.location.href = '/', 3);
     }
     handleVictory() {
         this.delayedRedirect();
