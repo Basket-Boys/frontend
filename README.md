@@ -2,6 +2,8 @@
 
 Try our game [here!](https://word-tris.netlify.app)
 
+Our backend: https://github.com/Basket-Boys/backend
+
 ![gameplay](https://user-images.githubusercontent.com/35862661/155864075-f71d8869-c295-4d1a-af7e-5ca5253c76e6.gif)
 
 ## Team Basket Boys
@@ -20,8 +22,6 @@ Try our game [here!](https://word-tris.netlify.app)
 
 
 An intense 1 vs 1 typing game that draws inspiration from Typeracer and Tetris. Send "garbage" to the other person by typing perfectly in quick succession - and clear your garbage by making "combos".
-
-Our backend: https://github.com/Basket-Boys/backend
 
 ## Rules of the game
 
