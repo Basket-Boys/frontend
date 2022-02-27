@@ -3,13 +3,12 @@ import { testWords } from "./fill";
 const MAX_ERRORS = 5;
 const MISTAKE_FORGIVENESS = 5;
 const MAX_NUM_CHARS = 5;
-const DELAY = 1;
 const PUNISH_ME_DADDY = 10; // IN SECONDS
 
 //returns an array [0, 1, 2, ..., n]
 const range = (n) => {
   return Array.from(Array(n).keys());
-}
+};
 
 // THIS IS AN INTERNAL FUNCTION, NOT FOR EXPORTING (unless need?)
 const shuffle = (array) => {
@@ -30,7 +29,7 @@ const shuffle = (array) => {
   }
 
   return array;
-}
+};
 
 // Get wordlist - get a list of words, return two shuffled wordlists.
 
@@ -38,11 +37,10 @@ const getWordList = () => {
   return shuffle(testWords);
 };
 
-
 //delay a function
 const delayFn = (fn, delay) => {
   setTimeout(() => fn(), delay * 1000);
-}
+};
 
 // Idle Punisher - returns the setInterval.
 // Remember to call clearInterval() on the returned interval afterwards.
@@ -56,7 +54,13 @@ const getIdlePunisher = (
 ) => {
   // Creates a setInterval that adds 1 to mistakeMeter every X seconds.
   const punisher = setInterval(() => {
-    const gameLost = onFinishWord(getComboCount(), setComboCount, getMistakeCount(), setMistakeCount, false);
+    const gameLost = onFinishWord(
+      getComboCount(),
+      setComboCount,
+      getMistakeCount(),
+      setMistakeCount,
+      false
+    );
     if (gameLost) onLoss();
   }, PUNISH_ME_DADDY * 1000);
   return punisher;
@@ -113,7 +117,15 @@ const setBlockage = (numChars, numWords) => {
   return arrList;
 };
 
-export { range, delayFn, getWordList, onFinishWord, shiftDown, setBlockage, getIdlePunisher };
+export {
+  range,
+  delayFn,
+  getWordList,
+  onFinishWord,
+  shiftDown,
+  setBlockage,
+  getIdlePunisher,
+};
 
 // TEST GWL
 // console.log(getWordList());
